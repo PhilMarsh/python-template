@@ -1,0 +1,8 @@
+{
+    "pylint.importStrategy": "fromEnvironment",
+    "black-formatter.importStrategy": "fromEnvironment",
+    "isort.importStrategy": "fromEnvironment",
+    "python.analysis.extraPaths": [
+        "src/"
+    ]
+}
