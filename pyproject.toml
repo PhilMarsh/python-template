@@ -25,6 +25,9 @@ qmock = "^1.0.0"
 profile = "black"
 # module-scope stuff is separated by 2 lines. why not imports too.
 lines_after_imports = 2
+# every `import` line imports only one thing; every imported thing gets its
+# own `import` line.
+force_single_line = true
 # enabling this really means "don't group by syntax", ie: don't group
 # `import x` lines above `from x import y` lines; just sort by module names.
 force_sort_within_sections = true
@@ -57,6 +60,10 @@ check-str-concat-over-line-jumps = true
 [tool.pylint."MESSAGES CONTROL"]
 # when a name is invalid, show the regex used to validate it.
 include-naming-hint = true
+# `Test*` test suite classes use name formats like
+# `Test<class name>_<method name>` and `Test_<function name>`.
+# all other classes use standard "PascalCase".
+class-rgx = "(Test[A-Z0-9_].*$)|(_?[A-Z][A-Za-z0-9]+$)"
 # rules we don't want or need.
 disable = [
     # Black handles formatting.
@@ -69,6 +76,13 @@ disable = [
     # a docstring on every function is definitely overkill.
     # small/simple functions should be obvious.
     "missing-function-docstring",
+    # there is nothing wrong with using an explicit else/elif after
+    # a jump (break, continue, raise, return). the matching nesting
+    # may often read better, even if it's not strictly necessary.
+    "no-else-break",
+    "no-else-continue",
+    "no-else-raise",
+    "no-else-return",
     # small classes aren't a bad thing.
     "too-few-public-methods",
     # there is nothing wrong with using `dict()` instead of `{}`.
@@ -96,10 +110,14 @@ enable = [
 ]
 
 [tool.coverage.run]
-source = ["src/todo"]
+source = ["src/"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests/"]
 pythonpath = ["src/"]
 filterwarnings = []
 # seconds
