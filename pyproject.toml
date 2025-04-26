@@ -47,6 +47,9 @@ load-plugins = [
     # suppress some false negatives for pytest idioms and add some pytest rules.
     "pylint_pytest",
 ]
+# Pylint doesn't fail for Informational "I" rules by default, but if they don't
+# fail, then no one will ever see or care about them.
+fail-on = "I"
 
 [tool.pylint.CLASSES]
 # `bad-mcs-classmethod-argument` defaults to `mcs`, which is terse and
@@ -66,10 +69,21 @@ include-naming-hint = true
 class-rgx = "(Test[A-Z0-9_].*$)|(_?[A-Z][A-Za-z0-9]+$)"
 # rules we don't want or need.
 disable = [
+    # pylint thinks simply raising `NotImplementedError` defines an abstract
+    # method but (a) it can be used for other things like documenting TODOs
+    # and TODONT's, and (b) ABCs should use `@abc.abstractmethod` which already
+    # enforces proper ABC usage.
+    "abstract-method",
+    # iterating over `dict.keys()` is more explicit than iterating over the
+    # `dict` itself. there's no reason to discourage that.
+    "consider-iterating-dictionary",
     # Black handles formatting.
     "format",
-    # TODO? enable? a docstring on every module might be reasonable.
-    "missing-module-docstring",
+    # unless there is *very heavy* logging, using %-formatting to defer string
+    # interpolation of logs just makes the strings harder to read for no
+    # practical performance benefit.
+    "logging-fstring-interpolation",
+    "logging-not-lazy",
     # a docstring on every class may be overkill.
     # simple classes like dataclasses should be self-describing.
     "missing-class-docstring",
@@ -98,7 +112,7 @@ disable = [
 enable = [
     # report invalid inline pylint directive.
     "bad-inline-option",
-    # report outdated inlint pylint directives.
+    # report outdated inline pylint directives.
     "deprecated-pragma",
     # report inline pylint suppressions (`disable`, `disable-next`)
     # that use cryptic codes like `W0611` instead of readable names
@@ -120,5 +134,4 @@ show_missing = true
 testpaths = ["tests/"]
 pythonpath = ["src/"]
 filterwarnings = []
-# seconds
-timeout = 20
+timeout = 5  # seconds
