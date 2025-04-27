@@ -6,17 +6,18 @@ package-mode = false # if this isn't a library for sharing.
 python = "~3.12.3"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.4.2"
-isort = "^5.13.2"
-pychoir = "^0.0.27"
-pylint = "^3.2.1"
-pylint-absolute-imports = "^1.1.0"
-pylint-pytest = "^1.1.7"
-pytest = "^8.2.1"
-pytest-cov = "^5.0.0"
-pytest-timeout = "^2.3.1"
-pytest-xdist = "^3.6.1"
-qmock = "^1.0.0"
+black = "~24.4.2"
+fawltydeps = "~0.19.0"
+isort = "~5.13.2"
+pychoir = "~0.0.27"
+pylint = "~3.2.1"
+pylint-absolute-imports = "~1.1.0"
+pylint-pytest = "~1.1.7"
+pytest = "~8.2.1"
+pytest-cov = "~5.0.0"
+pytest-timeout = "~2.3.1"
+pytest-xdist = "~3.6.1"
+qmock = "~1.0.0"
 
 [tool.black]
 
@@ -121,6 +122,24 @@ enable = [
     # report inline pylint suppressions (`disable`, `disable-next`)
     # that are superfluous/obsolete.
     "useless-suppression",
+]
+
+[tool.fawltydeps]
+ignore_unused = [
+    ### prod dependencies
+    # ... any production pins for indirect deps or plugins used implicitly.
+    ### dev dependencies
+    "black", # cli
+    "fawltydeps", # self
+    "isort", # cli
+    "pylint", # cli
+    "pylint-absolute-imports", # pylint plugin
+    "pylint-pytest", # pylint plugin
+    "pytest-cov", # pytest plugin
+    "pytest-timeout", # pytest plugin
+    "pytest-xdist", # pytest plugin
+    ### false positives from shared module names (https://github.com/tweag/FawltyDeps/issues/419)
+    # ... any dependencies with module names that overlap with local project modules.
 ]
 
 [tool.coverage.run]
