@@ -1,7 +1,7 @@
 {
     "pylint.importStrategy": "fromEnvironment",
-    "black-formatter.importStrategy": "fromEnvironment",
-    "isort.importStrategy": "fromEnvironment",
+    "ruff.importStrategy": "fromEnvironment",
+    "ruff.configurationPreference": "filesystemFirst",
     "python.analysis.extraPaths": [
         "src/"
     ]
